@@ -1,6 +1,6 @@
 package com.hui.gmall.user.mapper;
 
-import com.hui.gmall.user.bean.UmsMember;
+import com.hui.gmall.bean.UmsMember;
 import tk.mybatis.mapper.common.Mapper;
 
 import java.util.List;
