@@ -5,3 +5,6 @@
  #### 2.gmall-manage
  gmall-manage-service 用户服务service 8071
  gmall-manage-web  用户服务web 8081
+ #### 3.gmall-item
+ gmall-item-service 前台的商品详情服务 8072
+ gmall-item-web前台商品详情展示  8082

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en"  xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Title</title>
+</head>
+<body>
+    hello thymeleaf
+    <br />
+    <p th:text="${hello}">默认值</p>
+
+    <p th:each="str:${list}" th:text="${str}">
+    </p>
+
+    <p th:each="str:${list}" >
+        <input th:text="${str}"  th:value="${str}"></input>
+    </p>
+
+    <input type="checkbox" th:checked="${check}">
+
+    <a href="javascript:a()">点这里</a>
+
+    <a th:href="'javascript:a(\''+${hello}+'\')'">点这里</a>
+
+    <div th:include="indexInner::innerPart">被引入的页面</div>
+
+    <script language="JavaScript">
+        function a(hello) {
+            alert("牛逼"+hello);
+        }
+    </script>
+</body>
+</html>
