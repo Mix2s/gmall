@@ -1,12 +1,10 @@
 package com.hui.gmall.manage;
 
-
 import org.csource.common.MyException;
 import org.csource.fastdfs.ClientGlobal;
 import org.csource.fastdfs.StorageClient;
 import org.csource.fastdfs.TrackerClient;
 import org.csource.fastdfs.TrackerServer;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -16,29 +14,36 @@ import java.io.IOException;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-class GmallManageWebApplicationTests {
+public class GmallManageWebApplicationTests {
 
+	@Test
+	public void contextLoads() throws IOException, MyException {
 
-    @Test
-    void contextLoads() throws IOException, MyException {
-        String tracker = GmallManageWebApplication.class.getResource("/tracker.conf").getPath();  //获取配置文件路径
+		// 配置fdfs的全局链接地址
+		String tracker = GmallManageWebApplicationTests.class.getResource("/tracker.conf").getPath();// 获得配置文件的路径
 
-        ClientGlobal.init(tracker);
+		ClientGlobal.init(tracker);
 
-        TrackerClient trackerClient = new TrackerClient();
-        TrackerServer trackerServer = trackerClient.getTrackerServer();
-        StorageClient storageClient = new StorageClient(trackerServer, null);
+		TrackerClient trackerClient = new TrackerClient();
 
-        String url = "http://192.168.159.134";
+		// 获得一个trackerServer的实例
+		TrackerServer trackerServer = trackerClient.getTrackerServer();
 
-        String[] uploadInfos = storageClient.upload_file("D://abc.jpg", "jpg", null);
+		// 通过tracker获得一个Storage链接客户端
+		StorageClient storageClient = new StorageClient(trackerServer,null);
 
-        for (String uploadInfo : uploadInfos) {
-            url+=uploadInfo;
-        }
+		String[] uploadInfos = storageClient.upload_file("C:\\Users\\Administrator\\Desktop\\mi1.jpg", "jpg", null);
 
-        System.out.println(url);
+		String url = "http://192.168.159.134";
 
-    }
+		for (String uploadInfo : uploadInfos) {
+			url += "/"+uploadInfo;
+
+			//url = url + uploadInfo;
+		}
+
+		System.out.println(url);
+
+	}
 
 }
