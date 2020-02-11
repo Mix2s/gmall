@@ -100,4 +100,34 @@ public class SpuServiceImpl implements SpuService {
 
         return pmsProductImages;
     }
+
+    @Override
+    public List<PmsProductSaleAttr> spuSaleAttrListCheckBySku(String productId,String skuId) {
+      /*
+        PmsProductSaleAttr pmsProductSaleAttr = new PmsProductSaleAttr();
+        pmsProductSaleAttr.setProductId(productId);
+        List<PmsProductSaleAttr> pmsProductSaleAttrs = pmsProductSaleAttrMapper.select(pmsProductSaleAttr);
+
+        for (PmsProductSaleAttr productSaleAttr : pmsProductSaleAttrs) {
+
+            String saleAttrId = productSaleAttr.getSaleAttrId();
+            PmsProductSaleAttrValue pmsProductSaleAttrValue = new PmsProductSaleAttrValue();
+            //商品id
+            pmsProductSaleAttrValue.setSaleAttrId(saleAttrId);
+            //销售属性id
+            pmsProductSaleAttrValue.setProductId(productId);
+
+            //获取商品列表
+            List<PmsProductSaleAttrValue> pmsProductSaleAttrValues = pmsProductSaleAttrValueMapper.select(pmsProductSaleAttrValue);
+
+            productSaleAttr.setSpuSaleAttrValueList(pmsProductSaleAttrValues);
+
+            System.out.println(productSaleAttr.getSaleAttrName());
+        }
+       */
+        PmsProductSaleAttr pmsProductSaleAttr = new PmsProductSaleAttr();
+        List<PmsProductSaleAttr> pmsProductSaleAttrs = pmsProductSaleAttrMapper.selectSpuSaleAttrListCheckBySku(productId,skuId);  //自定义SQL
+
+        return pmsProductSaleAttrs;
+    }
 }
