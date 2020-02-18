@@ -29,6 +29,7 @@ public class SpuServiceImpl implements SpuService {
     @Autowired
     PmsProductSaleAttrValueMapper pmsProductSaleAttrValueMapper;
 
+
     @Override
     public List<PmsProductInfo> spuList(String catalog3Id) {
         PmsProductInfo pmsProductInfo = new PmsProductInfo();
@@ -125,7 +126,7 @@ public class SpuServiceImpl implements SpuService {
             System.out.println(productSaleAttr.getSaleAttrName());
         }
        */
-        PmsProductSaleAttr pmsProductSaleAttr = new PmsProductSaleAttr();
+
         List<PmsProductSaleAttr> pmsProductSaleAttrs = pmsProductSaleAttrMapper.selectSpuSaleAttrListCheckBySku(productId,skuId);  //自定义SQL
 
         return pmsProductSaleAttrs;
