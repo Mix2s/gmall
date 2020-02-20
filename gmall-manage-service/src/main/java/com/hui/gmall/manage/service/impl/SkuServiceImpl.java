@@ -16,9 +16,6 @@ import com.hui.gmall.util.RedisUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import redis.clients.jedis.Jedis;
-import tk.mybatis.mapper.util.StringUtil;
-
-import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -151,6 +148,21 @@ public class SkuServiceImpl implements SkuService {
         }
         jedis.close();
         return pmsSkuInfo;
+    }
+
+    @Override
+    public List<PmsSkuInfo> getAllSku() {
+        List<PmsSkuInfo> pmsSkuInfos = pmsSkuInfoMapper.selectAll();
+        for (PmsSkuInfo pmsSkuInfo : pmsSkuInfos) {
+            String skuid = pmsSkuInfo.getId();
+
+            PmsSkuAttrValue pmsSkuAttrValue = new PmsSkuAttrValue();
+            pmsSkuAttrValue.setSkuId(skuid);
+            List<PmsSkuAttrValue> select = pmsSkuAttrValueMapper.select(pmsSkuAttrValue);
+
+            pmsSkuInfo.setSkuAttrValueList(select);
+        }
+        return pmsSkuInfos;
     }
 
     //从数据库查询
