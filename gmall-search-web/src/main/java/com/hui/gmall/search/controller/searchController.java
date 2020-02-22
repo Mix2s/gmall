@@ -10,10 +10,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.io.IOException;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Controller
 public class searchController {
@@ -48,24 +45,35 @@ public class searchController {
 
         //对平台属性进一步处理 去掉当前条件中valueId 属性组
         String[] delValueIds = pmsSearchParam.getValueId();
-        Iterator<PmsBaseAttrInfo> iterator = pmsBaseAttrInfos.iterator();
-        while (iterator.hasNext()){
-            PmsBaseAttrInfo pmsBaseAttrInfo = iterator.next();
-            List<PmsBaseAttrValue> attrValueList = pmsBaseAttrInfo.getAttrValueList();
-            for (PmsBaseAttrValue pmsBaseAttrValue : attrValueList) {
-                String valueId = pmsBaseAttrValue.getId();
-                for (String delValueId : delValueIds) {
-                    if(delValueId.equals(valueId)){
-                        //删除
-                         iterator.remove();
+        if(delValueIds!=null){
+            Iterator<PmsBaseAttrInfo> iterator = pmsBaseAttrInfos.iterator();
+            while (iterator.hasNext()){
+                PmsBaseAttrInfo pmsBaseAttrInfo = iterator.next();
+                List<PmsBaseAttrValue> attrValueList = pmsBaseAttrInfo.getAttrValueList();
+                for (PmsBaseAttrValue pmsBaseAttrValue : attrValueList) {
+                    String valueId = pmsBaseAttrValue.getId();
+                    for (String delValueId : delValueIds) {
+                        if(delValueId.equals(valueId)){
+                            //删除
+                            iterator.remove();
+                        }
                     }
                 }
             }
         }
-        
 
         String urlParam = getUrlParam(pmsSearchParam);
         map.put("urlParam",urlParam);
+        String keyword = pmsSearchParam.getKeyword();
+        if(StringUtils.isNotBlank(keyword)){
+            map.put("keyword",keyword);
+        }
+
+
+        //面包屑
+        List<PmsSearchCrumb> pmsSearchCrumbs = new ArrayList<>();
+        map.put("attrValueSelectedList",pmsSearchCrumbs);
+
         return "list";
     }
 
