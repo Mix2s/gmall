@@ -8,6 +8,9 @@
  #### 3.gmall-item
  gmall-item-service 前台的商品详情服务 8072
  gmall-item-web前台商品详情展示  8082
- #### 4.search-service
+ #### 4.gmall-search
  gmall-serche-web 搜索服务的前台 8083
- gmall-search-service 搜索服务的后台 8074
+ gmall-search-service 搜索服务的后台 8073
+ #### 5.gmall-cart
+ gmall-cart-web 购物车前台 8084
+ gmall-cart-service 购物车后台 8074

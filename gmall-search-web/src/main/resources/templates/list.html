@@ -71,7 +71,8 @@
         </div>
         <i><img src="/list/image/right-@1x.png" alt=""></i>
         <span th:if="${keyword}!=null" th:text="'&quot;'+${keyword}+'&quot;'">&quot;小米&quot;</span>
-        <a class="select-attr"   th:each="baseAttrValueSelected:${attrValueSelectedList}"    th:href="'list.html?'+${baseAttrValueSelected.urlParam}"   th:utext=" ${baseAttrValueSelected.valueName} +'<b> ✖ </b>'"  > 2G<b> ✖ </b>
+        <a class="select-attr"   th:each="baseAttrValueSelected:${attrValueSelectedList}"    th:href="'list.html?'+${baseAttrValueSelected.urlParam}"   th:utext=" ${baseAttrValueSelected.valueName} +'<b> ✖ </b>'"  >
+            2G<b> ✖ </b>
         </a>
         <!-- <a class="select-attr"   href="#"      > 屏幕尺寸:5.1-5.5英寸<b> ✖ </b>
         </a>-->
@@ -401,15 +402,13 @@
 <script language="JavaScript">
     function item(skuid) {
         console.log("skuid:"+skuid);
-        window.location.href="http://item.gmall.com:8084/"+skuid+".html";
+        window.location.href="http://item.gmall.com:8082/"+skuid+".html";
     }
 
     function searchList(){
         var keyword = $("#keyword").val();
         window.location.href="/list.html?keyword="+keyword;
     }
-
-
 
     $(".sl_ext a:nth-child(1)").hover(function(){
         $(this).children("b").stop(true).animate({top:"3px"},50);
