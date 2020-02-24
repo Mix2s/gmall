@@ -78,7 +78,8 @@
                 <li>操作</li>
             </ul>
         </div>
-        <div id="cartListInner" th:include="cartListInner">
+
+        <div id="cartListInner" th:include="cartListInner"></div>
     </div>
 </div>
 
@@ -167,7 +168,7 @@
 <script type="text/javascript">
 
      function toTrade(){
-         window.location.href="http://cart.gmall.com:8087/toTrade";
+         window.location.href="http://cart.gmall.com:8084/toTrade";
     }
     function toItem(skuId) {
         window.location.href="http://item.gmall.com:8084/"+skuId+".html";
@@ -180,16 +181,13 @@
 
     function checkSku( chkbox){
        var skuId= $(chkbox).attr("value");
-
        var checked=$(chkbox).prop("checked");
-
        var isCheckedFlag="0";
        if(checked){
            isCheckedFlag="1";
        }
-        var param="isChecked="+isCheckedFlag+"&"+"skuId="+skuId;
-        $.post("checkCart",param,function (html) {
-            //服务会返回一个inner内嵌页面给ajax 返回新的页面替换掉原来的老的页面列表
+        $.post("checkCart","isChecked="+isCheckedFlag+"&"+"skuId="+skuId,function (html) {
+            // 服务会返回一个inner内嵌页面给ajax，我们返回的新的页面刷新替换掉原来的老的页面
             $("#cartListInner").html(html);
         });
 
