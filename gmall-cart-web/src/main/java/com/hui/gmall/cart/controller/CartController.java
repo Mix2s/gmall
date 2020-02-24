@@ -10,6 +10,7 @@ import com.hui.gmall.utils.CookieUtil;
 import org.apache.commons.lang3.StringUtils;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
@@ -27,6 +28,50 @@ public class CartController {
 
     @Reference
     CartService cartService;
+
+    @RequestMapping("checkCart")
+    public String checkCart(String isChecked,String skuId,HttpServletRequest request, HttpServletResponse response,ModelMap modelMap){
+       String memberId = "1";
+        //调用服务修改状态
+        OmsCartItem omsCartItem = new OmsCartItem();
+        omsCartItem.setMemberId(memberId);
+        omsCartItem.setIsChecked(isChecked);
+        omsCartItem.setProductSkuId(skuId);
+
+        cartService.checkCart(omsCartItem);
+
+        //将最新的数据从缓存中查出 渲染给内嵌页
+        List<OmsCartItem> omsCartItems = cartService.cartList(memberId);
+
+        modelMap.put("cartList",omsCartItems);
+        return "cartListInner";
+    }
+
+    @RequestMapping("cartList")
+    public String cartList(HttpServletRequest request, HttpServletResponse response, ModelMap modelMap){
+
+        List<OmsCartItem> omsCartItems = new ArrayList<>();
+
+        String memberId = "1";
+
+        if(StringUtils.isNotBlank(memberId)){
+
+            //已经登陆查询db
+            omsCartItems = cartService.cartList(memberId);
+        }else{
+            //未登录查询cookie
+            String cartListCookie = CookieUtil.getCookieValue(request, "cartListCookie", true);
+            if(StringUtils.isNotBlank(cartListCookie)){
+                omsCartItems = JSON.parseArray(cartListCookie,OmsCartItem.class);
+            }
+        }
+        for (OmsCartItem omsCartItem : omsCartItems) {
+            omsCartItem.setTotalPrice(omsCartItem.getPrice().multiply(omsCartItem.getQuantity()));
+        }
+        modelMap.put("cartList",omsCartItems);
+        return "cartList";
+    }
+
 
     @RequestMapping("addToCart")
     public String addToCart(String skuId, int quantity, HttpServletRequest request, HttpServletResponse response){

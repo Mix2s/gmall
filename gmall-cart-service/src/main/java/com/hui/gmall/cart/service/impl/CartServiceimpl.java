@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import redis.clients.jedis.Jedis;
 import tk.mybatis.mapper.entity.Example;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -63,11 +64,51 @@ public class CartServiceimpl implements CartService {
 
         Map<String,String> map = new HashMap<>();
         for (OmsCartItem cartItem : omsCartItems) {
+            cartItem.setTotalPrice(cartItem.getPrice().multiply(cartItem.getQuantity()));
             map.put(cartItem.getProductSkuId(), JSON.toJSONString(cartItem));
         }
+        jedis.del("user:"+memberId+":cart");
         jedis.hmset("user:"+memberId+":cart",map);
 
         jedis.close();
 
+    }
+
+    @Override
+    public List<OmsCartItem> cartList(String userId) {
+        Jedis jedis = null;
+        List<OmsCartItem> omsCartItems = new ArrayList<>();
+        try{
+           jedis =  redisUtil.getJedis();
+
+            List<String> hvals = jedis.hvals("user:" + userId + ":cart");
+
+            for (String hval : hvals) {
+                 OmsCartItem omsCartItem = JSON.parseObject(hval, OmsCartItem.class);
+                 omsCartItems.add(omsCartItem);
+            }
+        }catch (Exception e){
+            //记录系统日志
+            e.printStackTrace();
+            //String message = e.getMessage();
+            //logService.addErrLog(message)
+            return null;  //获取不到 jedis 返回控制
+        }finally {
+            jedis.close();
+        }
+
+        return omsCartItems;
+    }
+
+    @Override
+    public void checkCart(OmsCartItem omsCartItem) {
+        Example e = new Example(OmsCartItem.class);
+
+        e.createCriteria().andEqualTo("memberId",omsCartItem.getMemberId()).andEqualTo("productSkuId",omsCartItem.getProductId());
+
+        omsCartItemMapper.updateByExampleSelective(omsCartItem,e);
+
+        //缓存同步
+        flushCartCache(omsCartItem.getMemberId());
     }
 }
