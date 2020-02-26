@@ -138,7 +138,6 @@ public class CartController {
         // 判断用户是否登录
         String memberId = "1";   //"1";request.getAttribute("memberId");
 
-
         if (StringUtils.isBlank(memberId)) {
             // 用户没有登录
 

@@ -1,13 +1,18 @@
 package com.hui.gmall.user.service.impl;
 
 
+import com.alibaba.fastjson.JSON;
 import com.hui.gmall.bean.UmsMember;
 import com.hui.gmall.bean.UmsMemberReceiveAddress;
 import com.hui.gmall.service.UserService;
 import com.hui.gmall.user.mapper.UmsMemberReceiveAddressMapper;
+
 import com.hui.gmall.user.mapper.UserMapper;
+import com.hui.gmall.util.RedisUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import redis.clients.jedis.Jedis;
 
 import java.util.List;
 
@@ -43,4 +48,10 @@ public class UserServiceImpl implements UserService {
 
         return umsMemberReceiveAddresses;
     }
+
+    @Override
+    public UmsMember login(UmsMember umsMember) {
+        return null;
+    }
+
 }

@@ -16,7 +16,7 @@ public class GmallRedissonConfig {
     private String port;
 
     @Bean
-    public RedissonClient redissonClient(){
+    public RedissonClient  redissonClient(){
         Config config = new Config();
         config.useSingleServer().setAddress("redis://"+host+":"+port);
         RedissonClient redisson = Redisson.create(config);

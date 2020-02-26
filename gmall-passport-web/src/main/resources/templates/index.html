@@ -6,7 +6,7 @@
 		<script src="/js/jquery-3.1.1.min.js" type="text/javascript" charset="utf-8"></script>
 		<title>登录</title>
 	</head>
-	<body>
+	<>
 		<!--顶部logo-->
 
 		<header>
@@ -43,11 +43,11 @@
 						<li class="top_1">
 							<img src="/img/user_03.png" class="err_img1"/>
 
-							<input type="text" name="loginName" placeholder=" 邮箱/用户名/已验证手机"  class="user"/>
+							<input type="text" id="username" name="username" placeholder=" 邮箱/用户名/已验证手机"  class="user"/>
 						</li>
 						<li>
 							<img src="/img/user_06.png" class="err_img2"/>
-							<input type="password" name="passwd" placeholder=" 密码" class="password"/>
+							<input type="password" id="password" name="password" placeholder=" 密码" class="password"/>
 
 						</li>
 						<li class="bri">
@@ -71,10 +71,19 @@
 
 		
 		<!--底部-->
-		 
+		<input type="text" th:value="${ReturnUrl}" id="ReturnUrl">
 		
 	</body>
 	<script language="JavaScript">
+			function submitLogin() {
+				var username = $("#username").val();
+				var password = $("#password").val();
+				$.post("login",{username:username,password:password},function (token) {
+					alert(token)
+					//验证token是否为空 或异常
+					window.location.href=$("#ReturnUrl").val()+"?token="+token;
+				})
+			}
 
 			
 			var btn2=document.getElementsByClassName('btn2')[0];
