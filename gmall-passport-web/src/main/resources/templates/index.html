@@ -79,9 +79,12 @@
 				var username = $("#username").val();
 				var password = $("#password").val();
 				$.post("login",{username:username,password:password},function (token) {
-					alert(token)
-					//验证token是否为空 或异常
-					window.location.href=$("#ReturnUrl").val()+"?token="+token;
+					if(token=="fail"){
+						alter("用户名或者密码错误");
+					}else{
+						//验证token是否为空 或异常
+						window.location.href=$("#ReturnUrl").val()+"?token="+token;
+					}
 				})
 			}
 

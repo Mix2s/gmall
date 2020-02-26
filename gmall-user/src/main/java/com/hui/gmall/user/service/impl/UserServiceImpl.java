@@ -54,4 +54,9 @@ public class UserServiceImpl implements UserService {
         return null;
     }
 
+    @Override
+    public void addUserToken(String token, String memberId) {
+
+    }
+
 }
