@@ -52,13 +52,15 @@ public class HttpclientUtil {
         HttpPost httpPost = new HttpPost(url);
         CloseableHttpResponse response = null;
         try {
-            List<BasicNameValuePair> list=new ArrayList<>();
-            for (Map.Entry<String, String> entry : paramMap.entrySet()) {
-                list.add(new BasicNameValuePair(entry.getKey(),entry.getValue())) ;
+            if(paramMap!=null){
+                List<BasicNameValuePair> list=new ArrayList<>();
+                for (Map.Entry<String, String> entry : paramMap.entrySet()) {
+                    list.add(new BasicNameValuePair(entry.getKey(),entry.getValue())) ;
+                }
+                HttpEntity httpEntity=new UrlEncodedFormEntity(list,"utf-8");
+                httpPost.setEntity(httpEntity);
             }
-            HttpEntity httpEntity=new UrlEncodedFormEntity(list,"utf-8");
 
-            httpPost.setEntity(httpEntity);
             // 执行请求
             response = httpclient.execute(httpPost);
 

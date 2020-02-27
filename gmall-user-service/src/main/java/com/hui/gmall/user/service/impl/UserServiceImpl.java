@@ -108,4 +108,16 @@ public class UserServiceImpl implements UserService {
         }
         return null;
     }
+
+    @Override
+    public void addOauthUser(UmsMember umsMember) {
+        userMapper.insertSelective(umsMember);
+    }
+
+    @Override
+    public UmsMember checkOauthUser(UmsMember umsCheck) {
+        UmsMember umsMember = userMapper.selectOne(umsCheck);
+        return umsMember;
+    }
+
 }
