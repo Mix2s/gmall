@@ -30,17 +30,6 @@ public class CartController {
     @Reference
     CartService cartService;
 
-    @RequestMapping("toTrade")
-    @LoginRequired(loginSuccess = true)
-    public String toTrade(HttpServletRequest request, HttpServletResponse response, HttpSession session, ModelMap modelMap) {
-
-        String memberId = (String)request.getAttribute("memberId");
-        String nickname = (String)request.getAttribute("nickname");
-
-        return "toTrade";
-    }
-
-
     @RequestMapping("checkCart")
     @LoginRequired(loginSuccess = false)
     public String checkCart(String isChecked,String skuId,HttpServletRequest request, HttpServletResponse response, HttpSession session, ModelMap modelMap) {
