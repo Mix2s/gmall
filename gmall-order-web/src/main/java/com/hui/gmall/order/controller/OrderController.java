@@ -47,12 +47,6 @@ public class OrderController {
         String memberId = (String) request.getAttribute("memberId");
         String nickname = (String) request.getAttribute("nickname");
 
-        // 订单外部编号
-        String outTradeNo = "gmall";
-        SimpleDateFormat sdf = new SimpleDateFormat("YYYYMMDDHHmmss");
-        String format = sdf.format(new Date());  //时间字符串 当前毫秒时间戳
-        outTradeNo = outTradeNo+System.currentTimeMillis()+format;
-
         //检验唯一交易吗
         String success = orderService.checkTradeCode(memberId, tradeCode);
         if (success.equals("success")) {
@@ -66,6 +60,13 @@ public class OrderController {
             //omsOrder.setFreightAmount();
             omsOrder.setMemberId(memberId);
             omsOrder.setMemberUsername(nickname);
+            // 订单外部编号
+            String outTradeNo = "gmall";
+            SimpleDateFormat sdf = new SimpleDateFormat("YYYYMMDDHHmmss");
+            String format = sdf.format(new Date());  //时间字符串 当前毫秒时间戳
+            outTradeNo = outTradeNo+System.currentTimeMillis()+format;
+
+
             omsOrder.setNote("订单备注");
             omsOrder.setOrderSn(outTradeNo);
             omsOrder.setPayAmount(totalAmount);
@@ -99,7 +100,7 @@ public class OrderController {
                     OmsOrderItem omsOrderItem = new OmsOrderItem();
 
                     //检验价格
-                    boolean b = skuService.checkPrice(omsOrderItem.getProductSkuId(),omsOrderItem.getProductPrice());
+                    boolean b = skuService.checkPrice(omsCartItem.getProductSkuId(),omsCartItem.getPrice());
                     if(b==false){
                         return "tradeFail";
                     }
@@ -126,6 +127,8 @@ public class OrderController {
             //删除购物车对应的商品
             orderService.saveOrder(omsOrder);
             //重定向到支付系统
+
+
         } else {
             return "tradeFail";
         }

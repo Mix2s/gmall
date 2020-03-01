@@ -169,16 +169,17 @@ public class SkuServiceImpl implements SkuService {
 
     @Override
     public boolean checkPrice(String productSkuId, BigDecimal productPrice) {
-            boolean b = false;
+        boolean b = false;
 
         PmsSkuInfo pmsSkuInfo = new PmsSkuInfo();
         pmsSkuInfo.setId(productSkuId);
         PmsSkuInfo pmsSkuInfo1 = pmsSkuInfoMapper.selectOne(pmsSkuInfo);
+
         BigDecimal price = pmsSkuInfo1.getPrice();
+
         if(price.compareTo(productPrice)==0){
             b = true;
         }
-
         return b;
     }
 

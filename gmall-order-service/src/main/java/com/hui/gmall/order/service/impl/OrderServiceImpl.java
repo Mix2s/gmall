@@ -1,11 +1,13 @@
 package com.hui.gmall.order.service.impl;
 
+import com.alibaba.dubbo.config.annotation.Reference;
 import com.alibaba.dubbo.config.annotation.Service;
 
 import com.hui.gmall.bean.OmsOrder;
 import com.hui.gmall.bean.OmsOrderItem;
 import com.hui.gmall.order.mapper.OmsOrderItemMapper;
 import com.hui.gmall.order.mapper.OmsOrderMapper;
+import com.hui.gmall.service.CartService;
 import com.hui.gmall.service.OrderService;
 import com.hui.gmall.util.RedisUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +29,9 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     OmsOrderItemMapper omsOrderItemMapper;
+
+    @Reference
+    CartService cartService;
 
     // User:memberId:tradeCode
 
@@ -82,6 +87,8 @@ public class OrderServiceImpl implements OrderService {
         for (OmsOrderItem omsOrderItem : omsOrderItems) {
             omsOrderItem.setOrderId(orderId);
             omsOrderItemMapper.insertSelective(omsOrderItem);
+            //删除购物车数据
+            //cartService.delCart();
         }
     }
 
