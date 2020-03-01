@@ -59,7 +59,7 @@ public class UserServiceImpl implements UserService {
             jedis = redisUtil.getJedis();
             if (jedis != null) {
                 //做缓存存放umsMember
-                String umsMemberStr = jedis.get("user:" + umsMember.getPassword() + ":password");  //缺点保证 一个password对应一个UsermemeberId
+                String umsMemberStr = jedis.get("user:" + umsMember.getPassword()+umsMember.getUsername() + ":password");  //缺点保证 一个password对应一个UsermemeberId
                 if (StringUtils.isNotBlank(umsMemberStr)) {
                     //密码正确
                     UmsMember umsMemberFromCache = JSON.parseObject(umsMemberStr, UmsMember.class);
@@ -83,7 +83,7 @@ public class UserServiceImpl implements UserService {
             //开启数据库
             UmsMember umsMemberFromDb = loginFromDb(umsMember);
             if (umsMemberFromDb != null) {
-                jedis.setex("user:" + umsMember.getPassword() + ":info", 60 * 60 * 24, JSON.toJSONString(umsMemberFromDb));
+                jedis.setex("user:" + umsMember.getPassword()+umsMember.getUsername() + ":info", 60 * 60 * 24, JSON.toJSONString(umsMemberFromDb));
             }
             return umsMemberFromDb;  //有则返回用户 无则返回null
         }finally {
@@ -110,14 +110,23 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void addOauthUser(UmsMember umsMember) {
+    public UmsMember addOauthUser(UmsMember umsMember) {
         userMapper.insertSelective(umsMember);
+        return umsMember;
     }
 
     @Override
     public UmsMember checkOauthUser(UmsMember umsCheck) {
         UmsMember umsMember = userMapper.selectOne(umsCheck);
         return umsMember;
+    }
+
+    @Override
+    public UmsMemberReceiveAddress getReceiveAddressId(String receiveAddressId) {
+        UmsMemberReceiveAddress umsMemberReceiveAddress = new UmsMemberReceiveAddress();
+        umsMemberReceiveAddress.setId(receiveAddressId);
+        UmsMemberReceiveAddress umsMemberReceiveAddress1 = umsMemberReceiveAddressMapper.selectOne(umsMemberReceiveAddress);
+        return umsMemberReceiveAddress1;
     }
 
 }

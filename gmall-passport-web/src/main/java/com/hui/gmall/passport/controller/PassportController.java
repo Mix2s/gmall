@@ -71,17 +71,17 @@ public class PassportController {
 
         UmsMember umsCheck = new UmsMember();
         umsCheck.setSourceUid(umsMember.getSourceUid());
-        UmsMember umsMemberCheck = userService.checkOauthUser(umsCheck);
+        UmsMember umsMemberCheck = userService.checkOauthUser(umsCheck);  //检查该用户以前是否登录过系统
         if (umsMemberCheck == null) {
             //之前未保存 保存umsMemberId
-            userService.addOauthUser(umsMember);
+            umsMember = userService.addOauthUser(umsMember);
         } else {
             umsMember = umsMemberCheck;
         }
 
         //生成jwt 的token 并且重定向到首页 携带该token
 
-        String memberId = umsMember.getId();
+        String memberId = umsMember.getId();  // rpc的主键返回策略 导致返回null
         String nickname = umsMember.getNickname();
         String token = makeToken(memberId,nickname,request);
 
@@ -147,7 +147,7 @@ public class PassportController {
     public String makeToken(String memberId, String nickname, HttpServletRequest request) {
         String token = "";
         Map<String, Object> userMap = new HashMap<>();
-        userMap.put("memberId", memberId);
+        userMap.put("memberId", memberId);  //保存数据库之后返回id
         userMap.put("nickname", nickname);
 
         String ip = request.getHeader("x-forwarded-for");   //获通过nginx转发的客户端ip
