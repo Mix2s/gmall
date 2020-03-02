@@ -10,6 +10,7 @@ import com.hui.gmall.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -43,7 +44,7 @@ public class OrderController {
      */
     @RequestMapping("submitOrder")
     @LoginRequired(loginSuccess = true)
-    public String submitOrder(String receiveAddressId, BigDecimal totalAmount, String tradeCode, HttpServletRequest request, HttpServletResponse response, HttpSession session, ModelMap modelMap) {
+    public ModelAndView submitOrder(String receiveAddressId, BigDecimal totalAmount, String tradeCode, HttpServletRequest request, HttpServletResponse response, HttpSession session, ModelMap modelMap) {
         String memberId = (String) request.getAttribute("memberId");
         String nickname = (String) request.getAttribute("nickname");
 
@@ -102,7 +103,8 @@ public class OrderController {
                     //检验价格
                     boolean b = skuService.checkPrice(omsCartItem.getProductSkuId(),omsCartItem.getPrice());
                     if(b==false){
-                        return "tradeFail";
+                        ModelAndView mv = new ModelAndView("tradeFail");
+                        return mv;
                     }
                     //检验库存 远程调用库存系统
                     omsOrderItem.setProductPic(omsCartItem.getProductPic());
@@ -127,12 +129,14 @@ public class OrderController {
             //删除购物车对应的商品
             orderService.saveOrder(omsOrder);
             //重定向到支付系统
-
-
+            ModelAndView mv = new ModelAndView("redirect:http://payment.gmall.com:8087/index");
+            mv.addObject("outTradeNo",outTradeNo);
+            mv.addObject("totalAmount",totalAmount);
+            return mv;
         } else {
-            return "tradeFail";
+            ModelAndView mv = new ModelAndView("tradeFail");
+            return mv;
         }
-        return null;
     }
 
     /*

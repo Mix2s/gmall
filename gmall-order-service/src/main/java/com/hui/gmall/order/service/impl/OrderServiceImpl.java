@@ -13,7 +13,7 @@ import com.hui.gmall.util.RedisUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import redis.clients.jedis.Jedis;
 
-import java.math.BigDecimal;
+
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
@@ -61,11 +61,10 @@ public class OrderServiceImpl implements OrderService {
             String script = "if redis.call('get', KEYS[1]) == ARGV[1] then return redis.call('del', KEYS[1]) else return 0 end";
 
             Long eval = (Long) jedis.eval(script, Collections.singletonList(tradeKey),
-                    Collections.singletonList(tradeCode));
-
+                    Collections.singletonList(tradeCode));    //放置并发条件下 一个订单多次操作
 
             if (eval!=null&&eval!=0) {  //保持一致 删除redis
-                // jedis.del(tradeKey);
+                //jedis.del(tradeKey);
                 return "success";
             }else{
                 return "fail";
@@ -90,6 +89,14 @@ public class OrderServiceImpl implements OrderService {
             //删除购物车数据
             //cartService.delCart();
         }
+    }
+
+    @Override
+    public OmsOrder getOrderByOutTradeNo(String outTradeNo) {
+        OmsOrder omsOrder = new OmsOrder();
+        omsOrder.setOrderSn(outTradeNo);
+        OmsOrder omsOrder1 = omsOrderMapper.selectOne(omsOrder);
+        return omsOrder1;
     }
 
 }
