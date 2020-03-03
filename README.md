@@ -20,3 +20,5 @@
  ####7.gmall-order
  gmall-order-web 订单前台 8086
  gmall-order-service 订单后台 8076
+ ####8.gmall-payment
+ gmall-payment 8087

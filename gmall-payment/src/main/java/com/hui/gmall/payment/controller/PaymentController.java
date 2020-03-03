@@ -17,8 +17,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import sun.swing.StringUIClientPropertyKey;
-import tk.mybatis.mapper.util.StringUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
@@ -65,6 +63,9 @@ public class PaymentController {
             paymentService.updatePayment(paymentInfo);
         }
         //支付成功订单服务更新
+
+        //调用mq发送支付成功消息
+
         return "finish";
     }
 
