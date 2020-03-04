@@ -59,6 +59,7 @@ public class PaymentController {
             paymentInfo.setAlipayTradeNo(trade_no);// 支付宝的交易凭证号
             paymentInfo.setCallbackContent(call_back_content);//回调请求字符串
             paymentInfo.setCallbackTime(new Date());
+
             // 更新用户的支付状态
             paymentService.updatePayment(paymentInfo);
         }
@@ -104,6 +105,9 @@ public class PaymentController {
         paymentInfo.setTotalAmount(totalAmount);
 
         paymentService.savePaymentInfo(paymentInfo);
+
+        // 向消息中间件发送一个检查支付状态 延迟消息队列
+        paymentService.sendDelayPaymentResultCheckQueue(outTradeNo,5);
 
         //请求到支付宝
         return form;
