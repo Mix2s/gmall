@@ -2,7 +2,6 @@ package com.hui.gmall.manage.service.impl;
 
 import com.alibaba.dubbo.config.annotation.Service;
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.hui.gmall.bean.PmsSkuAttrValue;
 import com.hui.gmall.bean.PmsSkuImage;
 import com.hui.gmall.bean.PmsSkuInfo;
@@ -66,6 +65,8 @@ public class SkuServiceImpl implements SkuService {
             pmsSkuImage.setSkuId(skuId);
             pmsSkuImageMapper.insertSelective(pmsSkuImage);
         }
+
+        //发出缓存同步消息 用消息同步队列
 
     }
     @Override
