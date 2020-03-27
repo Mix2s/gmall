@@ -3,7 +3,6 @@ package com.hui.gmall.search.service.impl;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.hui.gmall.bean.PmsSearchParam;
 import com.hui.gmall.bean.PmsSearchSkuInfo;
-import com.hui.gmall.bean.PmsSkuAttrValue;
 import com.hui.gmall.service.SearchService;
 import io.searchbox.client.JestClient;
 import io.searchbox.core.Search;
